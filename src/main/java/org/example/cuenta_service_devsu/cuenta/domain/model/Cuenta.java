@@ -1,5 +1,7 @@
 package org.example.cuenta_service_devsu.cuenta.domain.model;
 
+import java.util.List;
+
 public class Cuenta {
 
     private int numero_cuenta;
@@ -7,6 +9,7 @@ public class Cuenta {
     private String tipo;
     private int saldo_inicial;
     private boolean estado;
+    private List<Movimiento> movimientos;
 
 
     public int getNumeroCuenta() {
@@ -29,23 +32,4 @@ public class Cuenta {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public int getSaldoInicial() {
-        return saldo_inicial;
-    }
-
-    public void setSaldoInicial(int saldo_inicial) {
-        this.saldo_inicial = saldo_inicial;
-    }
-
-    public boolean isEstado() {
-        return estado;
-    }
-
-    public void setEstado(boolean estado) {
-        this.estado = estado;
-    }
 }

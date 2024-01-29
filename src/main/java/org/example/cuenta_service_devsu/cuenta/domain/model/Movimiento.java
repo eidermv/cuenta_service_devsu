@@ -2,7 +2,7 @@ package org.example.cuenta_service_devsu.cuenta.domain.model;
 
 import java.util.Date;
 
-public class Movimiento extends Cuenta {
+public class Movimiento {
     private int movimientoid;
     private Date fecha;
     private String tipo;
@@ -26,12 +26,10 @@ public class Movimiento extends Cuenta {
         this.fecha = fecha;
     }
 
-    @Override
     public String getTipo() {
         return tipo;
     }
 
-    @Override
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
