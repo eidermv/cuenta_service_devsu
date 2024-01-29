@@ -8,7 +8,7 @@ public class Movimiento extends Cuenta {
     private String tipo;
     private int valor;
     private int saldo;
-    private int numero_cuenta;
+    private Cuenta cuenta;
 
     public int getMovimientoid() {
         return movimientoid;
@@ -52,11 +52,11 @@ public class Movimiento extends Cuenta {
         this.saldo = saldo;
     }
 
-    public int getNumeroCuenta() {
-        return numero_cuenta;
+    public Cuenta getCuenta() {
+        return cuenta;
     }
 
-    public void setNumeroCuenta(int numero_cuenta) {
-        this.numero_cuenta = numero_cuenta;
+    public void setCuenta(Cuenta cuenta) {
+        this.cuenta = cuenta;
     }
 }
