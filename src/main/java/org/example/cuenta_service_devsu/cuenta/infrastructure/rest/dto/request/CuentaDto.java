@@ -18,5 +18,6 @@ public class CuentaDto {
     @NotNull
     private int saldo_inicial;
     private boolean estado;
+    private String nombre;
 
 }

@@ -1,9 +1,11 @@
 package org.example.cuenta_service_devsu.cuenta.infrastructure.rest.controller;
 
+import io.vertx.core.json.JsonObject;
 import jakarta.validation.Valid;
 import org.example.cuenta_service_devsu.cuenta.application.command.EliminarPorNumeroCuenta;
 import org.example.cuenta_service_devsu.cuenta.application.command.GuardarCuenta;
 import org.example.cuenta_service_devsu.cuenta.application.query.BuscarPorNumeroCuenta;
+import org.example.cuenta_service_devsu.cuenta.application.query.ConsultarClienteTitular;
 import org.example.cuenta_service_devsu.cuenta.application.query.ListarCuenta;
 import org.example.cuenta_service_devsu.cuenta.infrastructure.db.entity.CuentaEnt;
 import org.example.cuenta_service_devsu.cuenta.infrastructure.db.repositoryImpl.CuentaEntRepository;
@@ -36,6 +38,8 @@ public class CuentaController {
     private static BuscarPorNumeroCuenta<Optional<CuentaEnt>> buscarPorNumeroCuenta;
     private static GuardarCuenta<CuentaEnt> guardarCuenta;
    private static EliminarPorNumeroCuenta eliminarPorNumeroCuenta;
+   @Autowired
+   private ConsultarClienteTitular consultarClienteTitular;
 
     @Autowired
     private CuentaMapper cuentaMapper;
@@ -46,7 +50,19 @@ public class CuentaController {
         cuentas = aListarCuenta()
                 .withRepo(cuentaEntRepository)
                 .build();
-        List<CuentaDto> dtoList = cuentas.execute().stream().map(clienteEnt -> cuentaMapper.toDto(clienteEnt)).toList();
+        List<CuentaDto> dtoList = cuentas.execute().stream().map(clienteEnt -> {
+            CuentaDto cuentaDto = cuentaMapper.toDto(clienteEnt);
+            consultarClienteTitular.setClienteid(cuentaDto.getClienteid());
+            return (CuentaDto) consultarClienteTitular.execute().map(o -> {
+                JsonObject cliente = new JsonObject(String.valueOf(o));
+                if (cliente.containsKey("error")) {
+                    cuentaDto.setNombre("No se pudo obtener titular");
+                } else {
+                    cuentaDto.setNombre(cliente.getString("nombre"));
+                }
+                return cuentaDto;
+            }).block();
+        }).toList();
         return Mono.just(ResponseEntity.status(200).body(dtoList));
     }
 
@@ -60,7 +76,17 @@ public class CuentaController {
             if (!lista.isPresent()) {
                 return Mono.just(ResponseEntity.status(404).body(null));
             } else {
-                return Mono.just(ResponseEntity.status(200).body(cuentaMapper.toDto(lista.get())));
+                CuentaDto cuentaDto = cuentaMapper.toDto(lista.get());
+                consultarClienteTitular.setClienteid(cuentaDto.getClienteid());
+                return consultarClienteTitular.execute().map(o -> {
+                    JsonObject cliente = new JsonObject(String.valueOf(o));
+                    if (cliente.containsKey("error")) {
+                        cuentaDto.setNombre("No se pudo obtener titular");
+                    } else {
+                        cuentaDto.setNombre(cliente.getString("nombre"));
+                    }
+                    return ResponseEntity.status(200).body(cuentaDto);
+                });
             }
     }
 
