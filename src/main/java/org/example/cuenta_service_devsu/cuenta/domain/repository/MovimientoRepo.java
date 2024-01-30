@@ -9,5 +9,6 @@ import java.util.List;
 @NoRepositoryBean
 public interface MovimientoRepo<T, ID> extends JpaRepository<T, ID> {
 
- public List<T> buscarPorRangoFechas(Date fecha1, Date fecha2);
+ public List<T> buscarPorRangoFechas(Date fecha1, Date fecha2, int clienteid);
+ public int ultimoSaldoPorCuenta(int numero_cuenta);
 }

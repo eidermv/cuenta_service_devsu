@@ -11,7 +11,7 @@ import java.util.Date;
 @Setter
 @Getter
 @Entity
-@Table(name = "persona")
+@Table(name = "movimiento")
 @Inheritance(strategy = InheritanceType.JOINED)
 public class MovimientoEnt {
     @Id
@@ -21,7 +21,7 @@ public class MovimientoEnt {
     private String tipo;
     private int valor;
     private int saldo;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "numero_cuenta")
     private CuentaEnt cuenta;
 

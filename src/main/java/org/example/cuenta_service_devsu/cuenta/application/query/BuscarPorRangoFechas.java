@@ -5,20 +5,22 @@ import org.example.cuenta_service_devsu.shared.application.query.Query;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 @Component
-public class BuscarPorRangoFechas<T> implements Query<T> {
+public class BuscarPorRangoFechas<T> implements Query<List<T>> {
 
     private MovimientoRepo repo;
     private Date data1;
     private Date data2;
+    private int data3;
 
     private BuscarPorRangoFechas() {
     }
 
     @Override
-    public T execute() {
-        return (T) repo.buscarPorRangoFechas(data1, data2);
+    public List<T> execute() {
+        return repo.buscarPorRangoFechas(data1, data2, data3);
     }
 
 
@@ -26,6 +28,7 @@ public class BuscarPorRangoFechas<T> implements Query<T> {
         private MovimientoRepo repo;
         private Date data1;
         private Date data2;
+        private int data3;
 
         private BuscarPorRangoFechasBuilder() {
         }
@@ -49,11 +52,17 @@ public class BuscarPorRangoFechas<T> implements Query<T> {
             return this;
         }
 
+        public BuscarPorRangoFechasBuilder withData3(int data3) {
+            this.data3 = data3;
+            return this;
+        }
+
         public BuscarPorRangoFechas build() {
             BuscarPorRangoFechas buscarPorRangoFechas = new BuscarPorRangoFechas();
             buscarPorRangoFechas.data1 = this.data1;
             buscarPorRangoFechas.repo = this.repo;
             buscarPorRangoFechas.data2 = this.data2;
+            buscarPorRangoFechas.data3 = this.data3;
             return buscarPorRangoFechas;
         }
     }
